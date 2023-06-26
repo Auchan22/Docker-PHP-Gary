@@ -13,4 +13,32 @@ services:
     volumes:
         - ./app:/app
   #mysql
-  #redis
+  db:
+    image: mysql:8.0
+    volumes:
+      - mysqldata:/var/lib/mysql
+      #De manera automatica y optimizada, docker va a decidir donde guardar la data
+    ports:
+      - "3306:3306"
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_USER: user
+      MYSQL_PASSWORD: secret
+      MYSQL_DATABASE: docker_php
+      
+      #redis
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      - PMA_HOST=localhost
+      - PMA_PORT=3306
+      - PMA_ARBITRARY=1
+
+volumes:
+  mysqldata:
+
+
